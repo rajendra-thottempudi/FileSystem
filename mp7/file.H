@@ -1,0 +1,99 @@
+/*
+     File        : file.H
+
+     Author      : Riccardo Bettati
+     Modified    : 2021/11/18
+
+     Description : Simple File class with sequential read/write operations.
+ 
+*/
+
+#ifndef _FILE_H_
+#define _FILE_H_
+
+/*--------------------------------------------------------------------------*/
+/* DEFINES */
+/*--------------------------------------------------------------------------*/
+
+/* -- (none) -- */
+
+/*--------------------------------------------------------------------------*/
+/* INCLUDES */
+/*--------------------------------------------------------------------------*/
+
+#include "file_system.H"
+#include "file.H"
+#include "file_system.H"
+
+/*--------------------------------------------------------------------------*/
+/* FORWARDS */ 
+/*--------------------------------------------------------------------------*/
+
+class Inode;
+class FileSystem;
+extern FileSystem* FILE_SYSTEM;
+
+/*--------------------------------------------------------------------------*/
+/* DATA STRUCTURES */ 
+/*--------------------------------------------------------------------------*/
+
+/* -- (none) -- */
+
+/*--------------------------------------------------------------------------*/
+/* class  F i l e   */
+/*--------------------------------------------------------------------------*/
+
+class File  {
+   friend class FileSystem;
+    
+private:
+     long fileId;
+     long size;
+     long c_block; 
+     long index; 
+     long position;
+     int br;
+     bool req;
+     int prt;
+     bool isRq;
+     long blocks[BLOCK_LIMIT];
+     char rt;
+
+public:
+
+   //  File(FileSystem * _fs, int _id); 
+    /* Constructor for the file handle. Set the ’current position’ to be at the 
+       beginning of the file. */
+   FileSystem * file_system;
+
+   File();
+
+    ~File();
+    /* Closes the file. Deletes any data structures associated with the file handle. */
+  
+    int Read(unsigned int _n, char * _buf);
+    /* Read _n characters from the file starting at the current position and
+       copy them in _buf.  Return the number of characters read. 
+       Do not read beyond the end of the file. */
+    
+    //int Write(unsigned int _n, const char * _buf);
+    void Write(unsigned int _n, const char * _buf);
+    /* Write _n characters to the file starting at the current position. If the write
+       extends over the end of the file, extend the length of the file until all data is 
+       written or until the maximum file size is reached. Do not write beyond the maximum
+       length of the file.  
+       Return the number of characters written. */
+    
+    void Reset();
+    /* Set the ’current position’ to the beginning of the file. */
+    bool isRqSet();
+    bool EoF();
+    bool isreqSet();
+    /* Is the current position for the file at the end of the file? */    
+    void Rewrite();
+
+};
+
+#endif
+
+
